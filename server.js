@@ -4,9 +4,11 @@ const products = require('./routes/products');
 const users = require('./routes/users');
 const errorHandler =require('./middlewares/errorHandler');
 
+
 dotenv.config({path:'./config/config.env'});
 
 const app = express();
+var sequelize = require('./config/orm');
 
 app.use(express.json());
 app.use('/api/products',products);
