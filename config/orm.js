@@ -16,7 +16,7 @@ const sequelize = new Sequelize(dbConfig.database,dbConfig.user,dbConfig.passwor
 
 sequelize.authenticate().then(()=>{
     console.log("connected succesfully")
-    sequelize.sync().then((data)=>{
+    sequelize.sync({ alter: true }).then((data)=>{
         console.log("models synced")
     }).catch((error)=>{
         console.log("models sync failed",error)

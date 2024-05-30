@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const products = require('./routes/products');
 const users = require('./routes/users');
+const categories = require('./routes/categories');
+const brands = require('./routes/brands');
 const errorHandler =require('./middlewares/errorHandler');
 
 
@@ -13,6 +15,8 @@ var sequelize = require('./config/orm');
 app.use(express.json());
 app.use('/api/products',products);
 app.use('/api/auth',users);
+app.use('/api/categories',categories);
+app.use('/api/brands',brands);
 
 app.use(errorHandler);
 

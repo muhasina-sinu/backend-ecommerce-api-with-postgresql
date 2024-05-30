@@ -1,6 +1,6 @@
 const pool = require('../config/db');
 const productQueries = require('../queries/products');
-const Product = require('../models/product');
+const {Product,Category,Brand} = require('../models/product');
 
 const getProducts = ()=>{
     return new Promise((resolve,reject)=>{
@@ -26,9 +26,9 @@ const getProductById = (id)=>{
 })
 }
 
-const createProduct = (title, image, price, offer_price)=>{
+const createProduct = (title, image, price, offer_price,category_id, brand_id)=>{
     return new Promise((resolve,reject)=>{
-        Product.create({title, image, price, offer_price}).then(data=>{
+        Product.create({title, image, price, offer_price,category_id, brand_id}).then(data=>{
             resolve(true)
         }).catch(error=>{
             reject(error);
@@ -45,10 +45,11 @@ const checkProductExists = (id)=>{
 })
 }
 
-const updateProduct = (title, image, price, offer_price,id)=>{
+const updateProduct = (title, image, price, offer_price,category_id, brand_id,id)=>{
     return new Promise((resolve,reject)=>{
+        console.log(category_id,brand_id);
         Product.update(
-            {title, image, price, offer_price},
+            {title, image, price, offer_price,category_id, brand_id},
             { where: {id: id } }
         ).then(data=>{
             resolve(true)
@@ -71,4 +72,61 @@ const deleteProduct = (id)=>{
 })
 }
 
-module.exports = {getProducts,createProduct,getProductById,checkProductExists,updateProduct,deleteProduct};
+const getProductsByCategoryId = (categoryId)=>{
+    return new Promise((resolve,reject)=>{
+        Product.findAll({
+            where:{
+                category_id:categoryId
+            },
+            attributes: ['title', 'price'],
+            include: [
+                {
+                    model: Category,
+                    attributes: ['name']  
+                },
+                {
+                    model: Brand,
+                    attributes: ['name']  
+                }
+            ]
+        }).then(product =>{
+            resolve(product);
+        }).catch(error=>{
+            reject(error);
+        })
+})
+}
+
+const getProductsByBrandId = (brandId)=>{
+    return new Promise((resolve,reject)=>{
+        Product.findAll({
+            where:{
+                brand_id:brandId
+            },
+            attributes: ['title', 'price'],
+            include: [
+                {
+                    model: Category,
+                    attributes: ['name']  
+                },
+                {
+                    model: Brand,
+                    attributes: ['name']  
+                }
+            ]
+        }).then(product =>{
+            resolve(product);
+        }).catch(error=>{
+            reject(error);
+        })
+})
+}
+
+module.exports = {getProducts,
+    createProduct,
+    getProductById,
+    checkProductExists,
+    updateProduct,
+    deleteProduct,
+    getProductsByCategoryId,
+    getProductsByBrandId};

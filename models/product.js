@@ -14,6 +14,43 @@ const Product = sequelize.define('product',{
     offer_price:DataTypes.DECIMAL
 })
 
+const Category = sequelize.define('category',{
+        id:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+            primaryKey:true,
+            autoIncrement:true
+        },
+        name:DataTypes.STRING
+    })
+Category.hasMany(Product,{foreignKey:'category_id'});
+Product.belongsTo(Category,{foreignKey:'category_id'});
+
+const Brand = sequelize.define('brand',{
+        id:{
+            type:DataTypes.INTEGER,
+            allowNull:false,
+            primaryKey:true,
+            autoIncrement:true
+        },
+        name:DataTypes.STRING
+    })
+
+Brand.hasMany(Product,{foreignKey:'brand_id'});
+Product.belongsTo(Brand,{foreignKey:'brand_id'});
+
+// const Order = sequelize.define('order',{
+//     id:{
+//         type:DataTypes.INTEGER,
+//         allowNull:false,
+//         primaryKey:true,
+//         autoIncrement:true
+//     },
+//     total_amount:DataTypes.DECIMAL
+// })
+// User.hasMany(Order,{foreignKey:'user_id'});
+// Order.belongsTo(User,{foreignKey:'user_id'});
+
 // const Role = sequelize.define('role',{
 //     id:{
 //         type:DataTypes.INTEGER,
@@ -23,6 +60,7 @@ const Product = sequelize.define('product',{
 //     },
 //     name:DataTypes.STRING
 // })
+
 
 // const User = sequelize.define('user',{
 //     id:{
@@ -46,4 +84,4 @@ const Product = sequelize.define('product',{
 // Role.belongsToMany(User,{through:'user-roles',foreignKey:"user_id"});
 
 
-module.exports = Product;
+module.exports = {Product,Category,Brand};

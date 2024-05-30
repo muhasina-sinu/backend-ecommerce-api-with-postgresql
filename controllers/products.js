@@ -27,8 +27,8 @@ const getProductById= asyncHandler(async (req,res,next)=>{
 //@route POST /api/products
 //@access admin
 const createProduct= asyncHandler(async (req,res,next)=>{
-        const { title, image, price, offer_price } = req.body;
-        const result =await productRepositories.createProduct(title, image, price, offer_price)
+        const { title, image, price, offer_price ,category_id, brand_id} = req.body;
+        const result =await productRepositories.createProduct(title, image, price, offer_price,category_id, brand_id)
         res.status(200).json({ 
             success:true,
             message: "new product added successfully",
@@ -45,10 +45,10 @@ const createProduct= asyncHandler(async (req,res,next)=>{
 const updateProduct= asyncHandler(async(req,res,next)=>{
     
         const id =req.params.id;
-        const { title, image, price, offer_price } = req.body;
+        const { title, image, price, offer_price, category_id, brand_id } = req.body;
         const productExists = await productRepositories.checkProductExists(id);
         if(productExists){
-            productRepositories.updateProduct(title, image, price, offer_price,id).then(data=>{
+            productRepositories.updateProduct(title, image, price, offer_price,category_id, brand_id,id).then(data=>{
                 res.status(200).json({ 
                     success:true,
                     message: "product updated successfully",
@@ -80,6 +80,30 @@ const deleteProduct= asyncHandler(async(req,res,next)=>{
         }
     }  )
 
+//@desc get products by category id
+//@route GET /api/products/categories/category_id
+//@access public
+const getProductsByCategoryId= asyncHandler(async (req,res,next)=>{
+    const categoryId =req.params.categoryId;
+    const products = await productRepositories.getProductsByCategoryId(categoryId);
+    res.status(200).json(products);
 
+});
 
-module.exports = {getProducts,getProductById,createProduct,updateProduct,deleteProduct};
+//@desc get products by brand id
+//@route GET /api/products/brands/brand_id
+//@access public
+const getProductsByBrandId= asyncHandler(async (req,res,next)=>{
+    const brandId =req.params.brandId;
+    const products = await productRepositories.getProductsByBrandId(brandId);
+    res.status(200).json(products);
+
+});
+
+module.exports = {getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getProductsByCategoryId,
+    getProductsByBrandId};
