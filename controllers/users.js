@@ -36,7 +36,7 @@ const addNewUser = asyncHandler(async (req, res, next) => {
     if(!users || users.length == 0){
       return next(new ErrorResponse(`invalid credentials`, 400));
     }
-    const user = users[0];
+    const user = users.dataValues;
     const isValid = verifyPassword(password,user.password);
     if(isValid){
       const token = createJwt(user.id);
@@ -51,4 +51,27 @@ const addNewUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`invalid credentials`, 400));
   });
   
-  module.exports = {addNewUser,login};
+//@desc get users
+//@router get /api/auth/users
+//@access admin
+
+const getUsers= asyncHandler(async(req,res,next)=>{
+  const users = await userRepositories.getUsers();
+  res.status(200).json(users);
+});
+
+//@desc update users
+//@router post /api/auth/users/:user_id
+//@access logged in user
+
+const updateUser= asyncHandler(async(req,res,next)=>{
+  const user_id = req.userid;
+  const {name,password} =req.body;
+  const user = await userRepositories.updateUser(user_id,name,password);
+  res.status(200).json({success:true,
+    message:"user data updated succesfully"
+  });
+});
+
+
+  module.exports = {addNewUser,login,getUsers,updateUser};

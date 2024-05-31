@@ -1,4 +1,4 @@
-const {OrderLine,Order,Product,User} = require('../models/product');
+const {OrderLine,Order,Product,Customer} = require('../models/product');
 const sequelize = require('../config/orm');
 
 const createOrder =  async (user_id,orderlines)=>{
@@ -78,7 +78,7 @@ const getOrdersByUserId = (user_id)=>{
                 user_id:user_id
             },
             include:[{
-                model:User,
+                model:Customer,
                 attributes:['name']
             }]
         }).then(orders =>{

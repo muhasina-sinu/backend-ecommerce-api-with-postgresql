@@ -39,7 +39,7 @@ const Brand = sequelize.define('brand',{
 Brand.hasMany(Product,{foreignKey:'brand_id'});
 Product.belongsTo(Brand,{foreignKey:'brand_id'});
 
-const User = sequelize.define('user',{
+const Customer = sequelize.define('customer',{
     id:{
         type:DataTypes.INTEGER,
         allowNull:false,
@@ -67,8 +67,8 @@ const Order = sequelize.define('order',{
     total_amount:DataTypes.DECIMAL
 })
 
-User.hasMany(Order,{foreignKey:'user_id'});
-Order.belongsTo(User,{foreignKey:'user_id'});
+Customer.hasMany(Order,{foreignKey:'user_id'});
+Order.belongsTo(Customer,{foreignKey:'user_id'});
 
 const OrderLine = sequelize.define('orderline',{
     id:{
@@ -88,21 +88,6 @@ OrderLine.belongsTo(Order,{foreignKey:'order_id'});
 Product.hasMany(OrderLine,{foreignKey:'product_id'});
 OrderLine.belongsTo(Product,{foreignKey:'product_id'});
 
-// const Role = sequelize.define('role',{
-//     id:{
-//         type:DataTypes.INTEGER,
-//         allowNull:false,
-//         primaryKey:true,
-//         autoIncrement:true
-//     },
-//     name:DataTypes.STRING
-// })
 
 
-
-
-// User.belongsToMany(Role,{through:'user-roles',foreignKey:"role_id"});
-// Role.belongsToMany(User,{through:'user-roles',foreignKey:"user_id"});
-
-
-module.exports = {Product,Category,Brand,Order,OrderLine,User};
+module.exports = {Product,Category,Brand,Order,OrderLine,Customer};
